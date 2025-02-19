@@ -17,11 +17,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps { 
-            // Убедитесь, что репозиторий клонируется
-            sh 'git clone https://github.com/Kirill-Masukov/eto-app.git'
-            dir('eto-app') {
-                sh 'git config remote.origin.url https://github.com/Kirill-Masukov/eto-app.git'
-              }
+              checkout scm
             } 
         }
 
