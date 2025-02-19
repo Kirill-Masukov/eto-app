@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        BACKEND_IMAGE = "etoosamoe/eto-backend:latest"
-        FRONTEND_IMAGE = "etoosamoe/eto-frontend:latest"
+        BACKEND_IMAGE = "kirill-masukov/eto-backend:latest"
+        FRONTEND_IMAGE = "kirill-masukov/eto-frontend:latest"
         POSTGRES_PASSWORD = "password"
         POSTGRES_USER = "etoapp"
         POSTGRES_DB = "etoapp"
@@ -17,7 +17,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/etoosamoe/eto-app.git'
+                git 'https://github.com/Kirill-Masukov/eto-app.git'
             }
         }
 
