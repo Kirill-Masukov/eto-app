@@ -17,7 +17,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/Kirill-Masukov/eto-app.git'
+                checkout scm // Используем встроенную команду для получения исходников
             }
         }
 
