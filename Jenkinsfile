@@ -53,7 +53,7 @@ pipeline {
                 script {
                     sh '''
                     docker-compose down
-                    docker-compose up --build --verbose
+                    docker-compose up -d
                     '''
                 }
             }
