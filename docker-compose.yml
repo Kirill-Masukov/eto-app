@@ -44,11 +44,11 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - etoapp
-    healthcheck:
-      test: "pg_isready --username=${POSTGRES_USER} && psql --username=${POSTGRES_USER} --list"
-      interval: 5s
-      timeout: 10s
-      retries: 10
+        #    healthcheck:
+        #      test: "pg_isready --username=${POSTGRES_USER} && psql --username=${POSTGRES_USER} --list"
+        #      interval: 5s
+        #      timeout: 10s
+        #      retries: 10
 
 volumes:
   postgres_data:
