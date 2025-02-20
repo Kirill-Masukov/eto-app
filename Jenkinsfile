@@ -15,29 +15,45 @@ pipeline {
     }
 
     stages {
+        stage('Debug Info') {
+            steps {
+                script {
+                    sh 'echo "=== WHOAMI ==="'
+                    sh 'whoami'
+                    sh 'echo "=== PWD ==="'
+                    sh 'pwd'
+                    sh 'echo "=== LS -LA ==="'
+                    sh 'ls -la'
+                }
+            }
+        }
+
         stage('Checkout') {
-            steps { 
-              git branch: 'main', url: 'https://github.com/Kirill-Masukov/eto-app.git'
-            } 
+            steps {
+                script {
+                    sh 'rm -rf eto-app' // Удаляем старый код, если был
+                    sh 'git clone https://github.com/Kirill-Masukov/eto-app.git'
+                    dir('eto-app') {
+                        sh 'git checkout main' // Убедимся, что на main
+                    }
+                }
+            }
         }
 
         stage('Prepare .env files') {
             steps {
                 script {
                     sh """
-                    # Создаём .env в корне
                     echo 'POSTGRES_PASSWORD=${POSTGRES_PASSWORD}' > .env
                     echo 'POSTGRES_USER=${POSTGRES_USER}' >> .env
                     echo 'POSTGRES_DB=${POSTGRES_DB}' >> .env
 
-                    # Создаём .env для backend
-                    echo 'DB_CONN=${DB_CONN}' > backend/.env
-                    echo 'UVICORN_PORT=${UVICORN_PORT}' >> backend/.env
-                    echo 'BACKEND_VERSION=${BACKEND_VERSION}' >> backend/.env
+                    echo 'DB_CONN=${DB_CONN}' > eto-app/backend/.env
+                    echo 'UVICORN_PORT=${UVICORN_PORT}' >> eto-app/backend/.env
+                    echo 'BACKEND_VERSION=${BACKEND_VERSION}' >> eto-app/backend/.env
 
-                    # Создаём .env для frontend
-                    echo 'REACT_APP_FRONT_VERSION=${REACT_APP_FRONT_VERSION}' > frontend/.env
-                    echo 'REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}' >> frontend/.env
+                    echo 'REACT_APP_FRONT_VERSION=${REACT_APP_FRONT_VERSION}' > eto-app/frontend/.env
+                    echo 'REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}' >> eto-app/frontend/.env
                     """
                 }
             }
@@ -47,7 +63,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                    cd backend
+                    cd eto-app/backend
                     docker build -t ${BACKEND_IMAGE} .
                     """
                 }
@@ -58,7 +74,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                    cd frontend
+                    cd eto-app/frontend
                     docker build -t ${FRONTEND_IMAGE} .
                     """
                 }
@@ -67,14 +83,14 @@ pipeline {
 
         stage('Run Application') {
             steps {
-                sh 'docker compose up -d --no-build'
+                sh 'cd eto-app && docker compose up -d --no-build'
             }
         }
 
         stage('Post-Deploy Check') {
             steps {
                 script {
-                    sh 'sleep 10' // Даем время контейнерам стартовать
+                    sh 'sleep 10'
                     sh 'curl -f http://localhost:8000/api/healthcheck'
                     sh 'curl -f http://localhost:3000'
                 }
