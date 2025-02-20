@@ -17,9 +17,16 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'git@github.com:your-repo/your-project.git'
+                script {
+                    sh 'rm -rf eto-app' // Удаляем старую версию
+                    sh 'git clone https://github.com/Kirill-Masukov/eto-app.git'
+                    dir('eto-app') {
+                        sh 'git checkout main' // Убедимся, что на main
+                    }
+                }
             }
-        }
+        } 
+
 
         stage('Create .env files') {
             steps {
