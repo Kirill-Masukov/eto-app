@@ -47,19 +47,6 @@ pipeline {
             }
         }
 
-        stage('Build and Push Docker Images') {
-            steps {
-                script {
-                    sh '''
-                    docker build -t ${BACKEND_IMAGE} ./backend
-                    docker build -t ${FRONTEND_IMAGE} ./frontend
-
-                    docker push ${BACKEND_IMAGE}
-                    docker push ${FRONTEND_IMAGE}
-                    '''
-                }
-            }
-        }
 
         stage('Deploy') {
             steps {
