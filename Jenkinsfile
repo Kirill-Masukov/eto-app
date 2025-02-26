@@ -26,27 +26,27 @@ pipeline {
         stage('Load Credentials') {
             steps {
                 script {
-                    env.POSTGRES_PASSWORD = credentials('POSTGRES_PASSWORD')
-                    env.DB_CONN = credentials('DB_CONN')
-                    
-                    withCredentials([usernamePassword(credentialsId: 'POSTGRES_CREDENTIALS', usernameVariable: 'POSTGRES_USER', passwordVariable: 'POSTGRES_PASSWORD')]) {
-                        sh '''
-                        echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
-                        echo "POSTGRES_USER=${POSTGRES_USER}"
-                        echo "POSTGRES_DB=etoapp"
-                        echo "DB_CONN=${DB_CONN}"                     
+                    withCredentials([
+                usernamePassword(credentialsId: 'POSTGRES_CREDENTIALS', usernameVariable: 'POSTGRES_USER', passwordVariable: 'POSTGRES_PASSWORD'),
+                string(credentialsId: 'POSTGRES_PASSWORD', variable: 'POSTGRES_PASSWORD'),
+                string(credentialsId: 'DB_CONN', variable: 'DB_CONN')
+            ]) {
+                sh '''
+                echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
+                echo "POSTGRES_USER=${POSTGRES_USER}"
+                echo "POSTGRES_DB=etoapp"
+                echo "DB_CONN=${DB_CONN}"                     
 
-                        echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}" > .env
-                        echo "POSTGRES_USER=${POSTGRES_USER}" >> .env
-                        echo "POSTGRES_DB=etoapp" >> .env
+                echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}" > .env                                                            echo "POSTGRES_USER=${POSTGRES_USER}" >> .env
+                echo "POSTGRES_DB=etoapp" >> .env
 
-                        echo "DB_CONN=${DB_CONN}" > backend/.env
-                        echo "UVICORN_PORT=${UVICORN_PORT}" >> backend/.env
-                        echo "BACKEND_VERSION=${BACKEND_VERSION}" >> backend/.env
+                echo "DB_CONN=${DB_CONN}" > backend/.env
+                echo "UVICORN_PORT=${UVICORN_PORT}" >> backend/.env
+                echo "BACKEND_VERSION=${BACKEND_VERSION}" >> backend/.env
 
-                        echo "REACT_APP_FRONT_VERSION=${REACT_APP_FRONT_VERSION}" > frontend/.env
-                        echo "REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}" >> frontend/.env
-                        '''
+                echo "REACT_APP_FRONT_VERSION=${REACT_APP_FRONT_VERSION}" > frontend/.env
+                echo "REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}" >> frontend/.env
+                '''
                     }
                 }
             }
