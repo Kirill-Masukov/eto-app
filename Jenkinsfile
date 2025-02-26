@@ -56,6 +56,7 @@ pipeline {
             steps {
                 script {
                     sh '''
+                    export $(grep -v '^#' .env | xargs)
                     docker-compose down
                     docker-compose up -d
                     '''
