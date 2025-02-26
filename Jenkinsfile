@@ -31,6 +31,11 @@ pipeline {
                     
                     withCredentials([usernamePassword(credentialsId: 'POSTGRES_CREDENTIALS', usernameVariable: 'POSTGRES_USER', passwordVariable: 'POSTGRES_PASSWORD')]) {
                         sh '''
+                        echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
+                        echo "POSTGRES_USER=${POSTGRES_USER}"
+                        echo "POSTGRES_DB=etoapp"
+                        echo "DB_CONN=${DB_CONN}"                     
+
                         echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}" > .env
                         echo "POSTGRES_USER=${POSTGRES_USER}" >> .env
                         echo "POSTGRES_DB=etoapp" >> .env
