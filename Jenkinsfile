@@ -10,10 +10,24 @@ pipeline {
         REACT_APP_BACKEND_URL = "http://localhost:8000"
     }
 
+    stage('Debug SSH') {
+        steps {
+            script {
+                sh '''
+                echo "Текущий пользователь: $(whoami)"
+                echo "SSH директория: $HOME/.ssh"
+                ls -la $HOME/.ssh
+                cat $HOME/.ssh/known_hosts
+                '''
+            }
+        }
+    }
+
     stages {
         stage('Checkout') {
             steps {
                 script {
+                    sh 'export GIT_SSH_COMMAND="ssh -i /var/jenkins_home/.ssh/id_ed25519 -o StrictHostKeyChecking=no"'
                     sh 'rm -rf eto-app' // Удаляем старую версию
                     sh 'git clone git@github.com:Kirill-Masukov/eto-app.git'
                     dir('eto-app') {
