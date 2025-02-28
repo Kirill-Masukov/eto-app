@@ -27,7 +27,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    sh 'export GIT_SSH_COMMAND="ssh -i /var/jenkins_home/.ssh/id_ed25519 -o StrictHostKeyChecking=no"'
+                    sh 'export GIT_SSH_COMMAND="ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no"'
                     sh 'rm -rf eto-app' // Удаляем старую версию
                     sh 'git clone git@github.com:Kirill-Masukov/eto-app.git'
                     dir('eto-app') {
