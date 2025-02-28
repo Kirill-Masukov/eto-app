@@ -11,19 +11,6 @@ pipeline {
     }
 
     stages {
-        stage('Debug SSH') {
-            steps {
-                script {
-                    sh '''
-                    echo "Текущий пользователь: $(whoami)"
-                    echo "SSH директория: $HOME/.ssh"
-                    ls -la $HOME/.ssh
-                    cat $HOME/.ssh/known_hosts
-                    '''
-                }
-            }
-        }
-
         stage('Checkout') {
             steps {
                 script {
