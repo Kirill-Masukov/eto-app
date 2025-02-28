@@ -10,20 +10,20 @@ pipeline {
         REACT_APP_BACKEND_URL = "http://localhost:8000"
     }
 
-    stage('Debug SSH') {
-        steps {
-            script {
-                sh '''
-                echo "Текущий пользователь: $(whoami)"
-                echo "SSH директория: $HOME/.ssh"
-                ls -la $HOME/.ssh
-                cat $HOME/.ssh/known_hosts
-                '''
+    stages {
+        stage('Debug SSH') {
+            steps {
+                script {
+                    sh '''
+                    echo "Текущий пользователь: $(whoami)"
+                    echo "SSH директория: $HOME/.ssh"
+                    ls -la $HOME/.ssh
+                    cat $HOME/.ssh/known_hosts
+                    '''
+                }
             }
         }
-    }
 
-    stages {
         stage('Checkout') {
             steps {
                 script {
@@ -51,7 +51,8 @@ pipeline {
                 echo "POSTGRES_DB=etoapp"
                 echo "DB_CONN=${DB_CONN}"                     
 
-                echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}" > .env                                                            echo "POSTGRES_USER=${POSTGRES_USER}" >> .env
+                echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}" > .env     
+                echo "POSTGRES_USER=${POSTGRES_USER}" >> .env
                 echo "POSTGRES_DB=etoapp" >> .env
 
                 echo "DB_CONN=${DB_CONN}" > backend/.env
