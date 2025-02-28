@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script {
                     sh 'rm -rf eto-app' // Удаляем старую версию
-                    sh 'git clone https://github.com/Kirill-Masukov/eto-app.git'
+                    sh 'git clone git@github.com:Kirill-Masukov/eto-app.git'
                     dir('eto-app') {
                         sh 'git checkout main'
                     }
